@@ -54,6 +54,7 @@
   cursor: pointer;
 } 
 
+
 .seleniumExtension-btn{
   -webkit-border-radius: 30px;
   -moz-border-radius: 30px;
@@ -75,3 +76,20 @@
 .seleniumExtension-col-12{
   padding-right:15px;
 }
+
+/* File UpLoad */
+.seleniumExtension-btn-file{
+  background-color: #FFA500;
+  color: #fff;
+  border-color: #FFA500;
+  margin-left: 1em;
+ 
+}
+
+.seleniumExtension-btn-file:hover,
+.seleniumExtension-btn-success:hover,
+.seleniumExtension-btn-danger:hover {
+      background-color:#002ead;
+      transition: 0.7s;
+}
+

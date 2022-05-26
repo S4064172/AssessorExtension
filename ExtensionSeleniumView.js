@@ -82,12 +82,64 @@ class ExtensionSeleniumView{
         return this.uniqueId+"_cancel";
     }
 
+	/*****READ FILE******/
+	__getIdBtnReadFile(){
+        return this.uniqueId+"_readfile";
+    }
+	
+	__getIdContReadFile(){
+        return this.uniqueId+"_readfilename";
+    }
+	
+	dispFile(id,contents) {
+		console.log(id);
+		console.log(contents);
+		document.getElementById(id).innerHTML=contents;
+	}
+
+	clickElem(elem) {
+		var eventMouse = document.createEvent("MouseEvents")
+		eventMouse.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+		elem.dispatchEvent(eventMouse)
+	}
+
+	openFile(func) {
+		var readFile = function(e) {
+			var file = e.target.files[0];
+			console.log(file);
+			fileInput.func=func(fileInput.idContent,file.name);
+			if (!file) {
+				return;
+			}
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var contents = e.target.result;
+				console.log(contents);
+				document.body.removeChild(fileInput)
+			}
+			reader.readAsText(file)
+		}
+		var fileInput = document.createElement("input")
+		fileInput.type='file'
+		fileInput.style.display='none'
+		fileInput.func=func
+		fileInput.idContent=this.__getIdContReadFile();
+		fileInput.onchange=readFile
+		document.body.appendChild(fileInput)
+		this.clickElem(fileInput)
+	}
+
     __injectView(){        
         document.body.innerHTML +=  `
         <div id="${this.__getIdModal()}" class="seleniumExtension-modal" style='display:none'>        
             <div class="seleniumExtension-modal-content">
                 <span class="seleniumExtension-close" id="${this.__getIdClose()}">&times;</span>
                 <h5>Extension PO</h5>
+				
+				<h5>
+                    <label for='${this.__getIdContReadFile()}'>Selected file:</label>
+					<label style='display: inline;' id='${this.__getIdContReadFile()}'></label>
+                </h5>
             
                 <div class='seleniumExtension-col-12'>
                     <label for='${this.__getIdPageObject()}'>Page Object</label>
@@ -102,6 +154,8 @@ class ExtensionSeleniumView{
                     <input type='button' class='seleniumExtension-btn seleniumExtension-btn-success' id='${this.__getIdBtnConfirm()}' value='Confirm'>
                     &nbsp;&nbsp;
                     <input type='button' class='seleniumExtension-btn seleniumExtension-btn-danger' id='${this.__getIdBtnCancel()}' value='Cancel'>
+					&nbsp;&nbsp;
+					<input type='button' class='seleniumExtension-btn seleniumExtension-btn-file'  id='${this.__getIdBtnReadFile()}' value='Choose a .side file'>
                 </div>
             </div>
         </div>`;
@@ -138,6 +192,11 @@ class ExtensionSeleniumView{
             );
             that.closeModal(false);
         });
+		
+		this.__el(this.__getIdBtnReadFile()).addEventListener("click",function(){
+			that.openFile(that.dispFile)
+        });
     }
 
+	
 }
