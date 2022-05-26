@@ -93,3 +93,57 @@
       transition: 0.7s;
 }
 
+/**** AUTO-COMPLETE*/
+.seleniumExtension-autocomplete {
+	position: relative;
+  width: 100%;
+}
+
+.seleniumExtension-autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.seleniumExtension-autocomplete-items input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.seleniumExtension-autocomplete-items input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+
+.seleniumExtension-autocomplete-items input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+}
+
+
+.seleniumExtension-autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+
+/*when hovering an item:*/
+.seleniumExtension-autocomplete-items div:hover {
+  background-color: #e9e9e9; 
+}
+
+/*when navigating through the items using the arrow keys:*/
+.seleniumExtension-autocomplete-active {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+}
