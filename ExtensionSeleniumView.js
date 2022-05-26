@@ -1,4 +1,7 @@
 class ExtensionSeleniumView{
+
+    
+
     constructor(controller){
         this.controller = controller;
         this.uniqueId = "modal_"+this.generateGuid();        
@@ -92,8 +95,8 @@ class ExtensionSeleniumView{
     }
 	
 	dispFile(id,contents) {
-		console.log(id);
-		console.log(contents);
+		//console.log(id);
+		//console.log(contents);
 		document.getElementById(id).innerHTML=contents;
 	}
 
@@ -106,19 +109,65 @@ class ExtensionSeleniumView{
 	openFile(func) {
 		var readFile = function(e) {
 			var file = e.target.files[0];
-			console.log(file);
-			fileInput.func=func(fileInput.idContent,file.name);
-			if (!file) {
+            if (!file) {
+                alert("Selected item is not a file");
 				return;
 			}
+
+            var filename = file.name.split('.').pop();
+            //console.log(e);
+            //console.log(e.target);
+			//console.log(file);
+            //console.log(filename);
+
+           if (filename !== 'side'){
+                alert("Selected file is not .side");
+                return;
+            }
+            
+			fileInput.func=func(fileInput.idContent,file.name);
+			
+
 			var reader = new FileReader();
 			reader.onload = function(e) {
-				var contents = e.target.result;
-				console.log(contents);
+                var map = new Map();
+                //console.log(map);
+                //console.log(e.target.result);
+				var contents = JSON.parse(e.target.result);
+				//console.log(contents);
+                var tests_to_parse = contents.tests;
+                //console.log(tests_to_parse);
+
+                tests_to_parse.forEach(test => {
+                    //console.log(test);
+                    test.commands.forEach(command => {
+                        //console.log(command);
+                        // Assessor key words: {ASSESSOR} and backToMain
+                        if(command.target.includes('{ASSESSOR}') && !command.target.includes('backToMain') ){
+                            //console.log(command.target);
+
+                            var assessor_command = command.target.split(':');
+                            //console.log(assessor_command);
+                            //console.log('PO: ' + assessor_command[1]);
+                            //console.log('Method: ' + assessor_command[2]);
+                            if(map.has(assessor_command[1])){
+                                //console.log(map.get(assessor_command[1]));
+                                if(!map.get(assessor_command[1]).includes(assessor_command[2]))
+                                    map.set(assessor_command[1], map.get(assessor_command[1])+','+assessor_command[2]);
+                            }else
+                                map.set(assessor_command[1],assessor_command[2]);
+                        }
+                           
+                    })
+                    
+                });
+                console.log(map);
 				document.body.removeChild(fileInput)
 			}
+            
 			reader.readAsText(file)
-		}
+        }
+
 		var fileInput = document.createElement("input")
 		fileInput.type='file'
 		fileInput.style.display='none'
