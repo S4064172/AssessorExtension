@@ -253,22 +253,30 @@ class ExtensionSeleniumView{
 
         /***** AUTO-COMPLETITION */
         this.__el(this.__getIdPageObject()).addEventListener("change",function(){
-            var po = that.__val(that.__getIdPageObject()).trim();
-            console.log(po);
-            if (that.map.has(po)){
-                var methods = Array.from(that.map.get(po).split(','));
-                //console.log(methods);
-                that.autocomplete(that.__el(that.__getIdPageMethod()),methods);
-            }else{
-                that.autocomplete(that.__el(that.__getIdPageMethod()),[]);
-            }
-               
+            var method_elem = that.__el(that.__getIdPageMethod());
+            method_elem.value = '';
+            that.set_methods_base_on_po();
+        });
 
-        })
+        this.__el(this.__getIdPageObject()).addEventListener("focusin",function(){
+           
+            var po_elem = that.__el(that.__getIdPageObject());
+            that.autocomplete(po_elem,Array.from(that.map.keys()));
+            var event = new Event('input');
+            po_elem.dispatchEvent(event);
+        });
+
+        this.__el(this.__getIdPageMethod()).addEventListener("focusin",function(){
+            var method_elem = that.__el(that.__getIdPageMethod());
+            that.set_methods_base_on_po();
+       
+            var event = new Event('input');
+            method_elem.dispatchEvent(event);
+        });
 		
     }
 
-	/*****AUTO-COMPLETITION
+	/*****AUTO-COMPLETION
      * 
      * the autocomplete function takes two arguments:
      * the text field element,
@@ -277,7 +285,7 @@ class ExtensionSeleniumView{
     autocomplete(inp, arr) {
 		//console.log(inp);
         //console.log(arr);
-        
+        var that = this;
         var currentFocus;
         /*execute a function when someone writes in the text field:*/
         inp.addEventListener("input", function(e) {
@@ -285,9 +293,7 @@ class ExtensionSeleniumView{
             var val = this.value;
             /*close any already open lists of autocompleted values*/
             closeAllLists();
-            if (!val)
-                return false;
-            
+           
             currentFocus = -1;
 
             /*create a DIV element that will contain the items (values):*/
@@ -303,7 +309,7 @@ class ExtensionSeleniumView{
                 /*check if the item starts with the same letters as the text field value:*/
                 //console.log(arr[index].substr(0, val.length).toUpperCase());
                 //console.log(val.toUpperCase());
-                if (arr[index].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                if (val === "" || arr[index].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
                     /*create a DIV element for each matching element:*/
                     var option = document.createElement("DIV");
                     /*make the matching letters bold:*/
@@ -410,8 +416,27 @@ class ExtensionSeleniumView{
         }
 
         /*execute a function when someone clicks in the document:*/
-		document.addEventListener("click", function (e) {
-			closeAllLists(e.target);
+        document.addEventListener("click", function (e) {
+           
+            var po_elem = that.__el(that.__getIdPageObject());
+            var method_elem =  that.__el(that.__getIdPageMethod());
+            var active_elem = document.activeElement;
+
+            if(po_elem !== active_elem && method_elem !== active_elem)
+			    closeAllLists(e.target);
+
 		});
 	}
+
+    set_methods_base_on_po(){
+        var po = this.__val(this.__getIdPageObject()).trim();
+        console.log(po);
+        if (this.map.has(po)){
+            var methods = Array.from(this.map.get(po).split(','));
+            //console.log(methods);
+            this.autocomplete(this.__el(this.__getIdPageMethod()),methods);
+        }else{
+            this.autocomplete(this.__el(this.__getIdPageMethod()),[]);
+        }
+    }
 }
