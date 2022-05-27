@@ -1,12 +1,11 @@
 class ExtensionSeleniumView{
 
-    
-
     constructor(controller){
         this.controller = controller;
         this.uniqueId = "modal_"+this.generateGuid();        
         this.__injectView();
         this.__addListener();
+        this.map = new Map();
     }
 
     generateGuid(){
@@ -94,20 +93,16 @@ class ExtensionSeleniumView{
         return this.uniqueId+"_readfilename";
     }
 	
-	dispFile(id,contents) {
-		//console.log(id);
-		//console.log(contents);
-		document.getElementById(id).innerHTML=contents;
-	}
-
-	clickElem(elem) {
-		var eventMouse = document.createEvent("MouseEvents")
-		eventMouse.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-		elem.dispatchEvent(eventMouse)
-	}
-
-	openFile(func) {
+    /*** openFile
+     * the function reads a file .side
+     * and create an hashMap whit all
+     * the accessor command 
+     * 
+     * <PO>,<Methods>
+     */
+	openFile() {
         let that = this;
+
 		var readFile = function(e) {
 			var file = e.target.files[0];
             if (!file) {
@@ -126,12 +121,13 @@ class ExtensionSeleniumView{
                 return;
             }
             
-			fileInput.func=func(fileInput.idContent,file.name);
+			//Set File name
+            that.__el(that.__getIdContReadFile()).innerHTML=file.name;
+            
 			
-
 			var reader = new FileReader();
 			reader.onload = function(e) {
-                var map = new Map();
+                
                 //console.log(map);
                 //console.log(e.target.result);
 				var contents = JSON.parse(e.target.result);
@@ -151,34 +147,35 @@ class ExtensionSeleniumView{
                             //console.log(assessor_command);
                             //console.log('PO: ' + assessor_command[1]);
                             //console.log('Method: ' + assessor_command[2]);
-                            if(map.has(assessor_command[1])){
+                            if(that.map.has(assessor_command[1])){
                                 //console.log(map.get(assessor_command[1]));
-                                if(!map.get(assessor_command[1]).includes(assessor_command[2]))
-                                    map.set(assessor_command[1], map.get(assessor_command[1])+','+assessor_command[2]);
+                                if(!that.map.get(assessor_command[1]).includes(assessor_command[2]))
+                                that.map.set(assessor_command[1], that.map.get(assessor_command[1])+','+assessor_command[2]);
                             }else
-                                map.set(assessor_command[1],assessor_command[2]);
+                               that.map.set(assessor_command[1],assessor_command[2]);
                         }
                            
                     })
                     
                 });
-                console.log(map);
-                console.log(Array.from(map.keys()))
-                that.autocomplete(that.__el(that.__getIdPageObject()),Array.from(map.keys()));
+                //console.log(that.map);
+                //console.log(Array.from(that.map.keys()))
+                //console.log(Array.from(that.map.values()))
+                that.autocomplete(that.__el(that.__getIdPageObject()),Array.from(that.map.keys()));
+                //that.autocomplete(that.__el(that.__getIdPageMethod()),Array.from(that.map.values()));
 				document.body.removeChild(fileInput)
 			}
             
 			reader.readAsText(file)
         }
 
-		var fileInput = document.createElement("input")
-		fileInput.type='file'
-		fileInput.style.display='none'
-		fileInput.func=func
-		fileInput.idContent=this.__getIdContReadFile();
-		fileInput.onchange=readFile
-		document.body.appendChild(fileInput)
-		this.clickElem(fileInput)
+        //Create input content
+		var fileInput = document.createElement("input");
+		fileInput.type='file';
+		fileInput.style.display='none';
+		fileInput.onchange=readFile;
+		document.body.appendChild(fileInput);
+		fileInput.click();
 	}
 
     __injectView(){        
@@ -251,18 +248,24 @@ class ExtensionSeleniumView{
 		
         /***** READ FILE */
 		this.__el(this.__getIdBtnReadFile()).addEventListener("click",function(){
-			that.openFile(that.dispFile)
+			that.openFile();
         });
 
-        /***** AUTO-COMPLETITION 
-        var temp = ['1','2','3','4','11'];
-		this.autocomplete(this.__el(this.__getIdPageObject()),temp);
-		this.autocomplete(this.__el(this.__getIdPageMethod()),temp);
-		*/
-		/*execute a function when someone clicks in the document:*/
-		document.addEventListener("click", function (e) {
-			  closeAllLists(e.target);
-		});
+        /***** AUTO-COMPLETITION */
+        this.__el(this.__getIdPageObject()).addEventListener("change",function(){
+            var po = that.__val(that.__getIdPageObject()).trim();
+            console.log(po);
+            if (that.map.has(po)){
+                var methods = Array.from(that.map.get(po).split(','));
+                //console.log(methods);
+                that.autocomplete(that.__el(that.__getIdPageMethod()),methods);
+            }else{
+                that.autocomplete(that.__el(that.__getIdPageMethod()),[]);
+            }
+               
+
+        })
+		
     }
 
 	/*****AUTO-COMPLETITION
@@ -272,9 +275,9 @@ class ExtensionSeleniumView{
      * an array of possible autocompleted values
      * *****/
     autocomplete(inp, arr) {
-		console.log(inp);
-        console.log(arr);
-
+		//console.log(inp);
+        //console.log(arr);
+        
         var currentFocus;
         /*execute a function when someone writes in the text field:*/
         inp.addEventListener("input", function(e) {
@@ -298,13 +301,13 @@ class ExtensionSeleniumView{
             /*for each item in the array...*/
             for (var index = 0; index < arr.length; index++) {
                 /*check if the item starts with the same letters as the text field value:*/
-                console.log(arr[index].substr(0, val.length).toUpperCase());
-                console.log(val.toUpperCase());
+                //console.log(arr[index].substr(0, val.length).toUpperCase());
+                //console.log(val.toUpperCase());
                 if (arr[index].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
                     /*create a DIV element for each matching element:*/
                     var option = document.createElement("DIV");
                     /*make the matching letters bold:*/
-                    console.log(arr[index].substr(0, val.length));
+                    //console.log(arr[index].substr(0, val.length));
                     option.innerHTML = "<strong>" + arr[index].substr(0, val.length) + "</strong>";
                     option.innerHTML += arr[index].substr(val.length);
                     /*insert a input field that will hold the current array item's value:*/
@@ -313,6 +316,9 @@ class ExtensionSeleniumView{
                     option.addEventListener("click", function(e) {
                         /*insert the value for the autocomplete text field:*/
                         inp.value = this.getElementsByTagName("input")[0].value;
+                        
+                        onChangeElem(inp);
+                    
                         /*close the list of autocompleted values,
                         (or any other open lists of autocompleted values:*/
                         closeAllLists();
@@ -321,7 +327,7 @@ class ExtensionSeleniumView{
                 }
             }
         });
-		  
+		
         /*execute a function presses a key on the keyboard:*/
         inp.addEventListener("keydown", function(e) {
             var x = document.getElementById(this.id + "autocomplete-list");
@@ -352,30 +358,44 @@ class ExtensionSeleniumView{
             }
         });
 		 
+        /*** addActive
+         * function to classify an item as "active" 
+         * 
+         */
         function addActive(x) {
-            /*a function to classify an item as "active":*/
+            
             if (!x) 
                 return false;
+
             /*start by removing the "active" class on all items:*/
             removeActive(x);
+
             if (currentFocus >= x.length) 
                 currentFocus = 0;
+
             if (currentFocus < 0) 
                 currentFocus = (x.length - 1);
+
             /*add class "autocomplete-active":*/
             x[currentFocus].classList.add("seleniumExtension-autocomplete-active");
         }
-            
+         
+        /*** removeActive
+         * a function to remove the "active" 
+         * class from all autocomplete items
+         */
         function removeActive(x) {
-            /*a function to remove the "active" class from all autocomplete items:*/
             for (var i = 0; i < x.length; i++) {
                 x[i].classList.remove("seleniumExtension-autocomplete-active");
             }
         }
-            
+
+        /*** closeAllLists
+         * close all autocomplete lists in the document,
+         * except the one passed as an argument
+         */
         function closeAllLists(elmnt) {
-            /*close all autocomplete lists in the document,
-            except the one passed as an argument:*/
+            
             var x = document.getElementsByClassName("seleniumExtension-autocomplete-items");
             for (var i = 0; i < x.length; i++) {
                 if (elmnt != x[i] && elmnt != inp) {
@@ -383,5 +403,15 @@ class ExtensionSeleniumView{
                 }
             }
         }
+
+        function onChangeElem(elem) {
+            var event = new Event('change');
+            elem.dispatchEvent(event);
+        }
+
+        /*execute a function when someone clicks in the document:*/
+		document.addEventListener("click", function (e) {
+			closeAllLists(e.target);
+		});
 	}
 }
