@@ -1,11 +1,33 @@
 class ExtensionSeleniumView{
 
     constructor(controller){
+       
         this.controller = controller;
         this.uniqueId = "modal_"+this.generateGuid();        
         this.__injectView();
         this.__addListener();
-        this.map = new Map();
+
+        this.po_session = "poSession";
+        this.file_name_session = "fileName";
+
+        //Retreive po-method
+        var objsJSON = JSON.parse(localStorage.getItem(this.po_session));
+        if(objsJSON !== null){
+            this.map = new Map(Object.entries(objsJSON));
+            var keys = Array.from(this.map.keys());
+            //console.log(Array.from(that.map.keys()))
+            //console.log(Array.from(that.map.values()))
+            this.autocomplete(this.__el(this.__getIdPageObject()),keys);
+        }else{
+            this.map = new Map();
+        }
+
+        //Retreive file name from local session
+        var fileName = localStorage.getItem(this.file_name_session);
+        if(fileName !== null){
+            console.log(fileName);
+            this.__el(this.__getIdContReadFile()).innerHTML = fileName;
+        }
     }
 
     generateGuid(){
@@ -92,6 +114,10 @@ class ExtensionSeleniumView{
 	__getIdContReadFile(){
         return this.uniqueId+"_readfilename";
     }
+
+    __getIdBtnClearSession(){
+        return this.uniqueId+"_clearSession";
+    }
 	
     /*** openFile
      * the function reads a file .side
@@ -124,7 +150,7 @@ class ExtensionSeleniumView{
 			//Set File name
             that.__el(that.__getIdContReadFile()).innerHTML=file.name;
             
-			
+			that.map = new Map();
 			var reader = new FileReader();
 			reader.onload = function(e) {
                 
@@ -155,18 +181,27 @@ class ExtensionSeleniumView{
                                that.map.set(assessor_command[1],assessor_command[2]);
                         }
                            
-                    })
+                    });
+                   
                     
+
                 });
-                //console.log(that.map);
-                //console.log(Array.from(that.map.keys()))
-                //console.log(Array.from(that.map.values()))
+                console.log(that.map);
+                
+                //Store map in local session
+                var map_stringify = JSON.stringify(Object.fromEntries(that.map));
+                //console.log(map_string);
+                localStorage.setItem(that.po_session, map_stringify);             
+                localStorage.setItem(that.file_name_session, that.__el(that.__getIdContReadFile()).innerHTML);
+               
+                //console.log(Array.from(that.map.keys()));
+                //console.log(Array.from(that.map.values()));
                 that.autocomplete(that.__el(that.__getIdPageObject()),Array.from(that.map.keys()));
                 //that.autocomplete(that.__el(that.__getIdPageMethod()),Array.from(that.map.values()));
-				document.body.removeChild(fileInput)
+				document.body.removeChild(fileInput);
 			}
             
-			reader.readAsText(file)
+			reader.readAsText(file);
         }
 
         //Create input content
@@ -209,6 +244,8 @@ class ExtensionSeleniumView{
                     <input type='button' class='seleniumExtension-btn seleniumExtension-btn-danger' id='${this.__getIdBtnCancel()}' value='Cancel'>
 					&nbsp;&nbsp;
 					<input type='button' class='seleniumExtension-btn seleniumExtension-btn-file'  id='${this.__getIdBtnReadFile()}' value='Choose a .side file'>
+                    &nbsp;&nbsp;
+					<input type='button' class='seleniumExtension-btn seleniumExtension-btn-file'  id='${this.__getIdBtnClearSession()}' value='Clear local Session'>
                 </div>
             </div>
         </div>`;
@@ -238,7 +275,18 @@ class ExtensionSeleniumView{
 
         this.__el(this.__getIdBtnConfirm()).addEventListener("click",function(){
             if(!that.checkFields()) 
-                return;            
+                return;  
+
+            if(that.map.has(that.__val(that.__getIdPageObject()).trim())){
+                if(!that.map.get(that.__val(that.__getIdPageObject()).trim()).includes(that.__val(that.__getIdPageMethod()).trim()))
+                    that.map.set(that.__val(that.__getIdPageObject()).trim(), that.map.get(that.__val(that.__getIdPageObject()).trim())+','+that.__val(that.__getIdPageMethod()).trim());
+            }else
+                that.map.set(that.__val(that.__getIdPageObject()).trim(),that.__val(that.__getIdPageMethod()).trim());
+
+            var map_stringify = JSON.stringify(Object.fromEntries(that.map));
+            //console.log(map_stringify);
+            localStorage.setItem(that.po_session, map_stringify);          
+            
             that.controller.recordPO(
                 that.__val(that.__getIdPageObject()).trim(),
                 that.__val(that.__getIdPageMethod()).trim()
@@ -251,6 +299,15 @@ class ExtensionSeleniumView{
 			that.openFile();
         });
 
+        this.__el(this.__getIdBtnClearSession()).addEventListener("click",function(){
+            localStorage.removeItem(that.po_session);
+            localStorage.removeItem(that.file_name_session);
+
+            that.map.clear();
+            console.log(that.map);
+            that.__el(that.__getIdContReadFile()).innerHTML="";
+        });
+
         /***** AUTO-COMPLETITION */
         this.__el(this.__getIdPageObject()).addEventListener("change",function(){
             var method_elem = that.__el(that.__getIdPageMethod());
@@ -261,6 +318,7 @@ class ExtensionSeleniumView{
         this.__el(this.__getIdPageObject()).addEventListener("focusin",function(){
            
             var po_elem = that.__el(that.__getIdPageObject());
+            
             that.autocomplete(po_elem,Array.from(that.map.keys()));
             var event = new Event('input');
             po_elem.dispatchEvent(event);
@@ -273,8 +331,10 @@ class ExtensionSeleniumView{
             var event = new Event('input');
             method_elem.dispatchEvent(event);
         });
-		
+               
     }
+
+    
 
 	/*****AUTO-COMPLETION
      * 
