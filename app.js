@@ -16,12 +16,7 @@ document.addEventListener('keydown',(event)=>{
 },true);
 
 
-function openModalPO(){  
-  /*let checkRecording = document.getElementById('selenium-ide-indicator');
-  if(checkRecording==null){
-    alert("The recording is not active!");
-    return;
-  }  */
+function openModalPO(){   
   checkInitialization();
   __SeleniumIDEView.openModal();
 }

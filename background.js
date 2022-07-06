@@ -1,4 +1,23 @@
 /**
+ * Initialize the communication with the content script
+ * this is used to undertand if the recording is stated or not
+*/
+let portFromCS;
+
+function connected(p) {
+  portFromCS = p;
+  portFromCS.onMessage.addListener(function(m) {
+	  console.log(m);
+	  if(m.greeting == 'The recording is active!')
+		openModalPO();
+  });
+}
+
+browser.runtime.onConnect.addListener(connected);
+
+
+
+/**
  * Returns all of the registered extension commands for this extension
  * and their shortcut (if active).
  */
@@ -17,13 +36,12 @@ gettingAllCommands.then((commands) => {
  *
  * In this sample extension, there is only one registered command: "Ctrl+Shift+U".
  * On Mac, this command will automatically be converted to "Command+Shift+U".
- */
- 
+ */ 
 browser.commands.onCommand.addListener((command) => {
 	if( !assessorIsOpen && command == 'open-modal'){
 		console.log(command);
-		openModalPO();
-		assessorIsOpen = true;
+		//send message to check the status of the recording
+		portFromCS.postMessage({greeting: "The recording is started?"});
 	}
 		
 	if( assessorIsOpen && command == 'close-modal'){
@@ -35,6 +53,7 @@ browser.commands.onCommand.addListener((command) => {
 
 function openModalPO(){  
 	console.log("openModalPO");
+	assessorIsOpen = true;
 	let createData = {
 		type: "detached_panel",
 		url: "assessor.html",

@@ -38,7 +38,15 @@
   },
   "background": {
     "scripts": [
-		"background.js"
+		"background.js","test2.js"
 	]
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [ "<all_urls>"],
+      "js": ["checkSeleniumStatus.js"],
+      "match_about_blank": true,
+      "all_frames": true
+    }
+  ]
 }
