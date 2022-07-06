@@ -19,8 +19,30 @@ gettingAllCommands.then((commands) => {
  */
  
 browser.commands.onCommand.addListener((command) => {
-  if( command == 'open-modal')
+	if( command == 'open-modal'){
 		console.log(command);
-  if(command == 'close-modal')
-	  console.log(command);
+		openModalPO();
+	}
+		
+	if(command == 'close-modal'){
+		console.log(command);
+	}
+	  
 });
+
+
+function openModalPO(){  
+	let createData = {
+		type: "detached_panel",
+		url: "assessor.html",
+		width: 550,
+		height: 500
+	};
+	
+	let creating = browser.windows.create(createData);
+	creating.then(() => {
+		console.log("The popup has been created");
+	});
+}
+
+
