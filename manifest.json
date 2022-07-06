@@ -37,20 +37,8 @@
     }
   },
   "background": {
-    "scripts": ["background.js"]
-  },
-  "content_scripts": [
-    {
-      "matches": [ "<all_urls>"],
-      "js": [
-		"utils.js", 
-		"ExtensionSeleniumController.js",
-		"ExtensionSeleniumView.js",
-		"app.js"
-		],
-      "css": ["css/app.css"],
-      "match_about_blank": true,
-      "all_frames": true
-    }
-  ]
+    "scripts": [
+		"background.js"
+	]
+  }
 }

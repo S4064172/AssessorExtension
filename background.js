@@ -2,6 +2,7 @@
  * Returns all of the registered extension commands for this extension
  * and their shortcut (if active).
  */
+let assessorIsOpen = false;
 let gettingAllCommands = browser.commands.getAll();
 gettingAllCommands.then((commands) => {
   for (let command of commands) {
@@ -19,19 +20,21 @@ gettingAllCommands.then((commands) => {
  */
  
 browser.commands.onCommand.addListener((command) => {
-	if( command == 'open-modal'){
+	if( !assessorIsOpen && command == 'open-modal'){
 		console.log(command);
 		openModalPO();
+		assessorIsOpen = true;
 	}
 		
-	if(command == 'close-modal'){
+	if( assessorIsOpen && command == 'close-modal'){
 		console.log(command);
+		assessorIsOpen = false;
 	}
 	  
 });
 
-
 function openModalPO(){  
+	console.log("openModalPO");
 	let createData = {
 		type: "detached_panel",
 		url: "assessor.html",
@@ -44,5 +47,3 @@ function openModalPO(){
 		console.log("The popup has been created");
 	});
 }
-
-

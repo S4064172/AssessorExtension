@@ -1,9 +1,10 @@
 class ExtensionSeleniumView{
     constructor(controller){
+		console.log("init - Start");
         this.controller = controller;
-        this.uniqueId = "modal_"+this.generateGuid();        
-        this.__injectView();
+        this.uniqueId = "modal_"+this.generateGuid();
         this.__addListener();
+		console.log("init - END");
     }
 
     generateGuid(){
@@ -28,11 +29,11 @@ class ExtensionSeleniumView{
         let pageObj =  this.__val(this.__getIdPageObject());
         let pageMethod = this.__val(this.__getIdPageMethod());
         if(pageObj.trim().length==0){
-            alert("Page Object empty!");
+            console.log("Page Object empty!");
             return false;
         }
         if(pageMethod.trim().length==0){
-            alert("Page Method empty!");
+            console.log("Page Method empty!");
             return false;
         }
         return true;
@@ -59,52 +60,27 @@ class ExtensionSeleniumView{
     }
 
     __getIdModal(){
-        return this.uniqueId+"_modal";
+        return "assessor_modal";
     }
 
     __getIdClose(){
-        return this.uniqueId+"_close";
+        return "assessor_close";
     }
 
     __getIdPageObject(){
-        return this.uniqueId+"_pageObject";
+        return "assessor_pageobject";
     }
 
     __getIdPageMethod(){
-        return this.uniqueId+"_method";
+        return "assessor_method";
     }
 
     __getIdBtnConfirm(){
-        return this.uniqueId+"_confirm";
+        return "assessor_confirm";
     }
 
     __getIdBtnCancel(){
-        return this.uniqueId+"_cancel";
-    }
-
-    __injectView(){        
-        document.body.innerHTML +=  `
-        <div id="${this.__getIdModal()}" class="seleniumExtension-modal" style='display:none'>        
-            <div class="seleniumExtension-modal-content">
-                <span class="seleniumExtension-close" id="${this.__getIdClose()}">&times;</span>
-                <h5>Extension PO</h5>
-            
-                <div class='seleniumExtension-col-12'>
-                    <label for='${this.__getIdPageObject()}'>Page Object</label>
-                    <input type='text' class='seleniumExtension-form-control' id='${this.__getIdPageObject()}'>
-                </div>
-                <div class='seleniumExtension-col-12'>
-                    <label for='${this.__getIdPageMethod()}'>Method Name</label>
-                    <input type='text' id='${this.__getIdPageMethod()}' class='seleniumExtension-form-control'>
-                </div>    
-                <br>
-                <div class='text-center'>
-                    <input type='button' class='seleniumExtension-btn seleniumExtension-btn-success' id='${this.__getIdBtnConfirm()}' value='Confirm'>
-                    &nbsp;&nbsp;
-                    <input type='button' class='seleniumExtension-btn seleniumExtension-btn-danger' id='${this.__getIdBtnCancel()}' value='Cancel'>
-                </div>
-            </div>
-        </div>`;
+        return "assessor_cancel";
     }
 
     __el(id){
@@ -138,6 +114,7 @@ class ExtensionSeleniumView{
             );
             that.closeModal(false);
         });
+		
     }
 
 }

@@ -7,7 +7,7 @@ document.addEventListener('keydown',(event)=>{
   let name = event.key;
   switch(name){
     case "F8":
-      openModalPO();
+      //openModalPO();
     break;
     case "F4":
       stopRecordingPO();
@@ -17,16 +17,17 @@ document.addEventListener('keydown',(event)=>{
 
 
 function openModalPO(){  
-  let checkRecording = document.getElementById('selenium-ide-indicator');
+  /*let checkRecording = document.getElementById('selenium-ide-indicator');
   if(checkRecording==null){
     alert("The recording is not active!");
     return;
-  }  
+  }  */
   checkInitialization();
   __SeleniumIDEView.openModal();
 }
 
 function stopRecordingPO(){
+console.log("Selenium IDE Script loaded");
   checkInitialization();
   __SeleniumIDEExtController.stopRecordPO();
 }
@@ -40,3 +41,6 @@ function checkInitialization(){
     __SeleniumIDEView = new ExtensionSeleniumView(__SeleniumIDEExtController);
   }
 }
+
+openModalPO();
+
