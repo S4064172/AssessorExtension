@@ -26,12 +26,28 @@
     "debugger",
     "<all_urls>"
   ],
+  "commands": {
+    "open-modal": {
+      "suggested_key": { "default": "F8" },
+      "description": "Stat the interaction with the assessor tool"
+    },
+	"close-modal": {
+      "suggested_key": { "default": "F4" },
+      "description": "Stop the interaction with the assessor tool"
+    }
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
   "content_scripts": [
     {
       "matches": [ "<all_urls>"],
       "js": [
-        "utils.js",    
-        "ExtensionSeleniumController.js","ExtensionSeleniumView.js","app.js"],
+		"utils.js", 
+		"ExtensionSeleniumController.js",
+		"ExtensionSeleniumView.js",
+		"app.js"
+		],
       "css": ["css/app.css"],
       "match_about_blank": true,
       "all_frames": true
