@@ -6,9 +6,9 @@ console.log("Selenium IDE Script loaded");
 document.addEventListener('keydown',(event)=>{
   let name = event.key;
   switch(name){
-    case "F8":
+    //case "F8":
       //openModalPO();
-    break;
+    //break;
     case "F4":
       stopRecordingPO();
     break;   
@@ -39,3 +39,18 @@ function checkInitialization(){
 
 openModalPO();
 
+function handleResponse(message) {
+  console.log('Message from the background script:');
+}
+
+function handleError(error) {
+  console.log('Error: ${error}');
+}
+
+window.onbeforeunload = function () {
+let sending = browser.runtime.sendMessage({
+    greeting: "Close Modal"
+  });
+  sending.then(handleResponse, handleError); 
+    return;
+};

@@ -37,9 +37,8 @@
     }
   },
   "background": {
-    "scripts": [
-		"background.js","test2.js"
-	]
+    "page": "background-page.html",
+	"persistent": false
   },
   "content_scripts": [
     {

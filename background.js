@@ -7,13 +7,26 @@ let portFromCS;
 function connected(p) {
   portFromCS = p;
   portFromCS.onMessage.addListener(function(m) {
-	  console.log(m);
-	  if(m.greeting == 'The recording is active!')
-		openModalPO();
+		console.log(m);
+		if(m.greeting == 'The recording is active!'){
+			portFromCS.postMessage({greeting: "success"});
+			openModalPO();
+		}
+	
   });
 }
 
 browser.runtime.onConnect.addListener(connected);
+
+
+function handleMessage(request, sender, sendResponse) {
+  console.log("Message from the content script: " +request.greeting);
+		if(request.greeting == 'Close Modal'){
+			assessorIsOpen = false;
+		}
+}
+
+browser.runtime.onMessage.addListener(handleMessage);
 
 
 
@@ -41,12 +54,15 @@ browser.commands.onCommand.addListener((command) => {
 	if( !assessorIsOpen && command == 'open-modal'){
 		console.log(command);
 		//send message to check the status of the recording
+		
 		portFromCS.postMessage({greeting: "The recording is started?"});
 	}
 		
-	if( assessorIsOpen && command == 'close-modal'){
+	if( command == 'close-modal'){
 		console.log(command);
-		assessorIsOpen = false;
+		if (!assessorIsOpen)
+			portFromCS.postMessage({greeting: "The extension is closed"});
+		
 	}
 	  
 });
@@ -65,4 +81,8 @@ function openModalPO(){
 	creating.then(() => {
 		console.log("The popup has been created");
 	});
+	
 }
+
+
+

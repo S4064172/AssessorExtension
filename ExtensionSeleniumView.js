@@ -56,7 +56,7 @@ class ExtensionSeleniumView{
         if(clearCommands){
             this.controller.clearCommandFromStartingPoint();
         }
-        this.__el(this.__getIdModal()).style.display = 'none';
+        window.close();
     }
 
     __getIdModal(){
