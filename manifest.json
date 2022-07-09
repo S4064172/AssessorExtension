@@ -31,19 +31,22 @@
       "suggested_key": { "default": "F8" },
       "description": "Stat the interaction with the assessor tool"
     },
-	"close-modal": {
+	"close-action": {
       "suggested_key": { "default": "F4" },
-      "description": "Stop the interaction with the assessor tool"
+      "description": "Stop the interaction with the po-method"
     }
   },
   "background": {
-    "page": "background-page.html",
+    "scripts": [
+      "background-script/background-webpage.js",
+      "background-script/background-assessor.js",
+      "background-script/background.js"],
 	"persistent": false
   },
   "content_scripts": [
     {
       "matches": [ "<all_urls>"],
-      "js": ["checkSeleniumStatus.js"],
+      "js": ["content-script/content.js"],
       "match_about_blank": true,
       "all_frames": true
     }
