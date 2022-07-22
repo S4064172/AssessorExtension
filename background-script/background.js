@@ -56,8 +56,8 @@ function openModalPO() {
 	let createData = {
 		type: "detached_panel",
 		url: "assessor/page/assessor.html",
-		width: 550,
-		height: 500
+		width: 500,
+		height: 325
 	};
 
 	let creating = browser.windows.create(createData);
