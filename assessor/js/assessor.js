@@ -3,19 +3,6 @@ let __SeleniumIDEView = null;
 
 console.log("Selenium IDE Script loaded");
 
-document.addEventListener('keydown', (event) => {
-  let name = event.key;
-  switch (name) {
-    //case "F8":
-    //openModalPO();
-    //break;
-    case "F4":
-      stopRecordingPO();
-      break;
-  }
-}, true);
-
-
 function openModalPO() {
   checkInitialization();
   __SeleniumIDEView.openModal();

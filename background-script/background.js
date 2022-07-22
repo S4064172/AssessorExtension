@@ -5,7 +5,7 @@
  * Note that this logs to the Add-on Debugger's console
  */
 
-//Flag use to undestand if the assessor-page is opened
+//Flag use to understand if the assessor-page is opened
 let assessorIsOpen = false;
 
 /**
@@ -29,20 +29,21 @@ browser.commands.onCommand.addListener((command) => {
 
 	if (!assessorIsOpen && command == 'open-modal') {
 		console.log(command);
-		//send message to check the status of the recording
-		_sendMessage({
-			command: "open-modal",
-			message: "The recording is started?"
-		});
+		//send a message to check the status of the recording
+		checkRecordingStatus();
 	}
 
 	if (command == 'close-action') {
 		console.log(command);
-		if (!assessorIsOpen)
+		if (!assessorIsOpen){
+			extensionIsColsed();
+		}else{
 			_sendMessage({
 				command: "close-action",
-				message: "The extension is closed"
+				message: "Close the method-PO"
 			});
+		}
+			
 	}
 });
 

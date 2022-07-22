@@ -1,5 +1,10 @@
 /**
- * This script is used to send messages to the background script.
+ * This script is used to manage the communication
+ * between the web page and the extension
+ */
+
+/**
+ * This function is used to send messages to the background script.
 */
 
 function handleResponse(message) {
@@ -22,3 +27,14 @@ window.onbeforeunload = function () {
 	sending.then(handleResponse, handleError);
 	return;
 };
+
+/**
+ * This function is used to manage messages coming from the background script.
+*/
+var myPort = browser.runtime.connect({ name: "port-from-cs" });
+
+myPort.onMessage.addListener(function (message) {
+	console.log("Received message: " + JSON.stringify(message));
+	if(message.command == 'close-action')
+		stopRecordingPO()
+});
