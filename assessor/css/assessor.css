@@ -1,6 +1,6 @@
 .seleniumExtension-form-control{
   display: block;
-  width: 100%;
+  width: -moz-available;
   height: calc(1.5em + .75rem + 2px);
   padding: .375rem .75rem;
   font-size: 1rem;
@@ -109,6 +109,8 @@
   top: 100%;
   left: 0;
   right: 0;
+  overflow-y: scroll;
+  max-height: 110px;
 }
 
 .seleniumExtension-autocomplete-items input {
