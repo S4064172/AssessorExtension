@@ -26,13 +26,27 @@
     "debugger",
     "<all_urls>"
   ],
+  "commands": {
+    "open-modal": {
+      "suggested_key": { "default": "F8" },
+      "description": "Stat the interaction with the assessor tool"
+    },
+	"close-action": {
+      "suggested_key": { "default": "F4" },
+      "description": "Stop the interaction with the po-method"
+    }
+  },
+  "background": {
+    "scripts": [
+      "background-script/background-webpage.js",
+      "background-script/background-assessor.js",
+      "background-script/background.js"],
+	"persistent": false
+  },
   "content_scripts": [
     {
       "matches": [ "<all_urls>"],
-      "js": [
-        "utils.js",    
-        "ExtensionSeleniumController.js","ExtensionSeleniumView.js","app.js"],
-      "css": ["css/app.css"],
+      "js": ["content-script/content.js"],
       "match_about_blank": true,
       "all_frames": true
     }

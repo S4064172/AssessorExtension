@@ -17,7 +17,7 @@
 
 /* The Modal (background) */
 .seleniumExtension-modal {
-  display: none; /* Hidden by default */
+  /*display: none;*/ /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1000; /* Sit on top */
   left: 0;
@@ -33,10 +33,10 @@
 /* Modal Content/Box */
 .seleniumExtension-modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  /*margin: 15% auto;*/ /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  /*width: 80%;*/ /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
