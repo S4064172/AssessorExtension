@@ -130,7 +130,6 @@ class ExtensionSeleniumController {
     }
 
     clearCommandFromStartingPoint() {
-        console.log("clearCommand");
         let that = this;
         let startingCommand = this.__getStartingCommands();
         console.log(startingCommand);
@@ -161,6 +160,11 @@ class ExtensionSeleniumController {
 
     stopRecordPO() {
         this.recordCommand("echo", `{ASSESSOR}backToMain`, "", false);
+        return true;
+    }
+
+    stopRecordingPOFather() {
+        this.recordCommand("echo", `{ASSESSOR}backToFather`, "", false);
         return true;
     }
 }

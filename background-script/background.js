@@ -33,17 +33,23 @@ browser.commands.onCommand.addListener((command) => {
 		checkRecordingStatus();
 	}
 
-	if (command == 'close-action') {
+	if (command == 'close-action' || command == 'close-action-father') {
 		console.log(command);
 		if (!assessorIsOpen){
 			extensionIsColsed();
 		}else{
-			_sendMessage({
-				command: "close-action",
-				message: "Close the method-PO"
-			});
+			if(command == 'close-action'){
+				_sendMessage({
+					command: "close-action",
+					message: "Close the method-PO"
+				});
+			}else{
+				_sendMessage({
+					command: "close-action-father",
+					message: "Close the method-PO (innerMode)"
+				});
+			}
 		}
-			
 	}
 });
 

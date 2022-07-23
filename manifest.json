@@ -34,6 +34,10 @@
 	"close-action": {
       "suggested_key": { "default": "F4" },
       "description": "Stop the interaction with the po-method"
+    },
+  "close-action-father": {
+      "suggested_key": { "default": "F2" },
+      "description": "Stop the interaction with the po-method (innerMode)"
     }
   },
   "background": {
