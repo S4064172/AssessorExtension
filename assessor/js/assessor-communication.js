@@ -36,4 +36,7 @@ myPort.onMessage.addListener(function (message) {
 	console.log("Received message: " + JSON.stringify(message));
 	if(message.command == 'close-action')
 		stopRecordingPO();
+	
+	if(message.command == 'close-action-father')
+		stopRecordingPOFather();
 });

@@ -11,6 +11,13 @@ function openModalPO() {
 function stopRecordingPO() {
   checkInitialization();
   __SeleniumIDEExtController.stopRecordPO();
+  __SeleniumIDEExtController.setStartingCommands();
+}
+
+function stopRecordingPOFather() {
+  checkInitialization();
+  __SeleniumIDEExtController.stopRecordingPOFather();
+  __SeleniumIDEExtController.setStartingCommands();
 }
 
 function checkInitialization() {
