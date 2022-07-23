@@ -28,6 +28,6 @@ function checkRecordingStatus() {
 
 //check if the recording is started or not
 function extensionIsColsed() {
-	alert("The extention is closed, you cannot use this command");
+	alert("The extension is closed, you cannot use this command");
 	return;
 }

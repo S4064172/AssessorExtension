@@ -38,11 +38,7 @@ class ExtensionSeleniumView {
     }
 
     openModal() {
-        let that = this;
-        this.controller.getCommands().then(res => {
-            that.controller.setStartingCommands(res);
-            that.__el(that.__getIdModal()).style.display = 'block';
-        });
+        this.controller.setStartingCommands();   
     }
 
     clearModal() {
@@ -50,9 +46,11 @@ class ExtensionSeleniumView {
         this.__el(this.__getIdPageMethod()).value = "";
     }
 
-    closeModal(clearCommands) {
-        if (clearCommands) {
-            this.controller.clearCommandFromStartingPoint();
+    saveCommands(saveCommands) {
+        if (saveCommands) {
+            this.controller.setStartingCommands();   
+        }else{
+            this.controller.clearCommandFromStartingPoint()
         }
         // window.close();
     }
@@ -93,14 +91,9 @@ class ExtensionSeleniumView {
         let that = this;
         console.log("Apply Listener");
 
-        // this.__el(this.__getIdClose()).addEventListener("click",function(){
-        //     that.clearModal();
-        //     that.closeModal(true);
-        // });
-
         this.__el(this.__getIdBtnCancel()).addEventListener("click", function () {
             that.clearModal();
-            that.closeModal(true);
+            that.saveCommands(false);
         });
 
         this.__el(this.__getIdBtnConfirm()).addEventListener("click", function () {
@@ -110,7 +103,7 @@ class ExtensionSeleniumView {
                 that.__val(that.__getIdPageObject()).trim(),
                 that.__val(that.__getIdPageMethod()).trim()
             );
-            that.closeModal(false);
+            that.saveCommands(true);
         });
 
     }

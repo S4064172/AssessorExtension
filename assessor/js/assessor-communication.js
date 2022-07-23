@@ -16,14 +16,13 @@ function handleError(error) {
 }
 
 window.onbeforeunload = function () {
-
 	//Through this message, we notify
 	//that the assessor page is closed
 	let sending = browser.runtime.sendMessage({
 		command: "assessor-close",
-		messagge: "Assessor page is closed"
+		message: "Assessor page is closed"
 	});
-
+	
 	sending.then(handleResponse, handleError);
 	return;
 };
@@ -36,5 +35,5 @@ var myPort = browser.runtime.connect({ name: "port-from-cs" });
 myPort.onMessage.addListener(function (message) {
 	console.log("Received message: " + JSON.stringify(message));
 	if(message.command == 'close-action')
-		stopRecordingPO()
+		stopRecordingPO();
 });
