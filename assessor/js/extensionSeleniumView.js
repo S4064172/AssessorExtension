@@ -63,8 +63,9 @@ class ExtensionSeleniumView {
         this.controller.setStartingCommands();   
     }
 
-    clearModal() {
-        this.__el(this.__getIdPageObject()).value = "";
+    clearModal(all) {
+        if(all)
+            this.__el(this.__getIdPageObject()).value = "";
         this.__el(this.__getIdPageMethod()).value = "";
     }
 
@@ -125,7 +126,7 @@ class ExtensionSeleniumView {
         console.log("Apply Listener");
 
         this.__el(this.__getIdBtnCancel()).addEventListener("click", function () {
-            that.clearModal();
+            that.clearModal(true);
             that.saveCommands(false);
         });
 
@@ -149,7 +150,7 @@ class ExtensionSeleniumView {
             );
 
             that.saveCommands(true);
-            that.clearModal();
+            that.clearModal(false);
         });
 
 		this.__el(this.__getIdBtnReadFile()).addEventListener("click",function(){

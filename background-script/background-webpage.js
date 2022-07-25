@@ -34,7 +34,6 @@ function onError(error) {
 
 /*
 Create all the context menu items.
-*/
 browser.contextMenus.create({
   id: "open-modal",
   title: "open-modal",
@@ -47,7 +46,7 @@ browser.contextMenus.create({
   onclick: extensionIsColsed
 }, onCreated);
 
-/*
+
 Define all the action
 */
 function getCurrentTab() {
