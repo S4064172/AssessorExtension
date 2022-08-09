@@ -153,7 +153,7 @@ class ExtensionSeleniumController {
         if (methodName == "" || methodName == null) {
             throw new Error("Method name is empty or null")
         }
-        this.clearCommandFromStartingPoint();
+        //this.clearCommandFromStartingPoint();
         this.recordCommand("echo", `{ASSESSOR}:${pageObject}:${methodName}`, "", false);
         return true;
     }
