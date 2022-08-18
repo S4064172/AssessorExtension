@@ -36,3 +36,33 @@ browser.runtime.onMessage.addListener(handleMessage);
  }
  
  browser.runtime.onConnect.addListener(connected);
+
+
+//Create all the context menu items.
+browser.contextMenus.create({
+  id: "back-to-main",
+  title: "BackToMain",
+  onclick: BackToMain
+}, onCreated);
+
+browser.contextMenus.create({
+  id: "back-to-father",
+  title: "BackToFather",
+  onclick: backToFather
+}, onCreated);
+
+
+//Define all the action
+function BackToMain() {
+  _sendMessage({
+    command: "close-action",
+    message: "Close the method-PO"
+  });
+}
+
+function backToFather() {
+  _sendMessage( {
+    command: "close-action-father",
+    message: "Close the method-PO"
+  });
+}
