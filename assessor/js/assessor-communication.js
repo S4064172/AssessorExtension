@@ -39,4 +39,6 @@ myPort.onMessage.addListener(function (message) {
 	
 	if(message.command == 'close-action-father')
 		stopRecordingPOFather();
+
+	
 });

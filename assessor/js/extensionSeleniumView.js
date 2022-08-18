@@ -325,13 +325,21 @@ class ExtensionSeleniumView {
                 /*check if the item starts with the same letters as the text field value:*/
                 //console.log(arr[index].substr(0, val.length).toUpperCase());
                 //console.log(val.toUpperCase());
-                if (val === "" || arr[index].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                if (val === "" || arr[index].toUpperCase().includes(val.toUpperCase())) {
                     /*create a DIV element for each matching element:*/
                     var option = document.createElement("DIV");
                     /*make the matching letters bold:*/
                     //console.log(arr[index].substr(0, val.length));
-                    option.innerHTML = "<strong>" + arr[index].substr(0, val.length) + "</strong>";
-                    option.innerHTML += arr[index].substr(val.length);
+                    if(val === ""){
+                        option.innerHTML = arr[index];
+                    }else{
+                        var start = arr[index].toUpperCase().indexOf(val.toUpperCase());
+                        var end = start + val.length
+                        option.innerHTML = arr[index].substr(0,start);
+                        option.innerHTML += "<strong>" + arr[index].substr( start , start===0?end:end -1 ) + "</strong>";
+                        option.innerHTML += arr[index].substr(end);
+                    }
+                    
                     /*insert a input field that will hold the current array item's value:*/
                     option.innerHTML += "<input type='hidden' value='" + arr[index] + "'>";
                     /*execute a function when someone clicks on the item value (DIV element):*/
