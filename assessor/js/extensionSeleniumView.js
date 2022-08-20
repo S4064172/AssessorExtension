@@ -334,10 +334,15 @@ class ExtensionSeleniumView {
                         option.innerHTML = arr[index];
                     }else{
                         var start = arr[index].toUpperCase().indexOf(val.toUpperCase());
-                        var end = start + val.length
+                        //console.log("start: " + start);
+                        var end = start + val.length;
+                        //console.log("end: " + end);
                         option.innerHTML = arr[index].substr(0,start);
-                        option.innerHTML += "<strong>" + arr[index].substr( start , start===0?end:end -1 ) + "</strong>";
-                        option.innerHTML += arr[index].substr(end);
+                        //console.log(arr[index].substr(0,start));
+                        option.innerHTML += "<strong>" + arr[index].substr( start , val.length ) + "</strong>";
+                        //console.log(arr[index].substr( start , val.length ));
+                        option.innerHTML += arr[index].substr(end,arr[index].length);
+                        //console.log( arr[index].substr(end,arr[index].length));
                     }
                     
                     /*insert a input field that will hold the current array item's value:*/
