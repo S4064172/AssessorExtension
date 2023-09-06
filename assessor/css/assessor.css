@@ -1,3 +1,8 @@
+  * {
+      font-family: sans-serif;
+    }
+
+
 .seleniumExtension-form-control{
   display: block;
   width: -moz-available;
